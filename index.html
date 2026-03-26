@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Knowledge Navigator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__content">
+      <p class="eyebrow">Team Prototype</p>
+      <h1>Knowledge Navigator</h1>
+      <p class="hero__text">
+        Ein schlanker Discovery-Layer für kuratierte Einstiege in relevantes Wissen.
+      </p>
+
+      <div class="search-row">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Suche nach Titel, Beschreibung oder Tags..."
+          aria-label="Suche"
+        />
+        <button id="clearFiltersBtn" type="button">Filter zurücksetzen</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <h2>Start Here</h2>
+      <p class="section-text">
+        Die wichtigsten kuratierten Einstiege für den Alltag.
+      </p>
+      <div id="startHereGrid" class="collection-grid"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Collections</h2>
+      <p class="section-text">
+        Einstieg nach Nutzungskontext statt Ordnerstruktur.
+      </p>
+      <div id="collectionsGrid" class="collection-grid"></div>
+    </section>
+
+    <section class="panel filters-panel">
+      <div class="filters-header">
+        <h2>Filter</h2>
+        <span id="resultCount" class="result-count"></span>
+      </div>
+
+      <div class="filter-group">
+        <label for="categoryFilter">Kategorie</label>
+        <select id="categoryFilter">
+          <option value="">Alle Kategorien</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="collectionFilter">Collection</label>
+        <select id="collectionFilter">
+          <option value="">Alle Collections</option>
+        </select>
+      </div>
+    </section>
+<section class="panel">
+  <div class="results-header">
+    <h2>Quick Entry</h2>
+  </div>
+  <p class="section-text">
+    Neuen Eintrag aus einem d.velop-Link vorbereiten und als JSON kopieren.
+  </p>
+
+  <div class="quick-entry-form">
+    <div class="quick-entry-grid">
+      <div class="filter-group quick-entry-full">
+        <label for="qeUrl">DMS- oder View-Link</label>
+        <input id="qeUrl" type="text" placeholder="https://dvelopecm.d-velop.cloud/..." />
+      </div>
+
+      <div class="filter-group">
+        <label for="qeTitle">Titel</label>
+        <input id="qeTitle" type="text" placeholder="z. B. Tenant Routing Overview" />
+      </div>
+
+      <div class="filter-group">
+        <label for="qeCategory">Kategorie</label>
+        <input id="qeCategory" type="text" placeholder="z. B. Architektur" />
+      </div>
+
+      <div class="filter-group quick-entry-full">
+        <label for="qeDescription">Beschreibung</label>
+        <textarea id="qeDescription" rows="3" placeholder="Kurze Einordnung des Inhalts"></textarea>
+      </div>
+
+      <div class="filter-group">
+        <label for="qeTags">Tags (Komma-getrennt)</label>
+        <input id="qeTags" type="text" placeholder="routing, tenant, overview" />
+      </div>
+
+      <div class="filter-group">
+        <label for="qeEntryType">Typ</label>
+        <select id="qeEntryType">
+          <option value="doc">doc</option>
+          <option value="process">process</option>
+          <option value="decision">decision</option>
+          <option value="template">template</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="qeOwner">Owner</label>
+        <input id="qeOwner" type="text" placeholder="z. B. Team X" />
+      </div>
+
+      <div class="filter-group">
+        <label for="qePriority">Priorität</label>
+        <select id="qePriority">
+          <option value="normal">normal</option>
+          <option value="high">high</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="qeCollections">Collections (IDs, Komma-getrennt)</label>
+        <input id="qeCollections" type="text" placeholder="start-here, architecture" />
+      </div>
+
+      <div class="filter-group quick-entry-full">
+        <label for="qeWhyRelevant">Warum relevant?</label>
+        <textarea id="qeWhyRelevant" rows="3" placeholder="Warum sollte jemand genau hier starten?"></textarea>
+      </div>
+    </div>
+
+    <div class="quick-entry-actions">
+      <button id="qeGenerateBtn" type="button" class="primary-btn">JSON erzeugen</button>
+      <button id="qeCopyBtn" type="button" class="secondary-btn">JSON kopieren</button>
+      <button id="qeResetBtn" type="button" class="secondary-btn">Zurücksetzen</button>
+    </div>
+
+    <div id="qeStatus" class="quick-entry-status"></div>
+
+    <div class="quick-entry-output-wrap">
+      <label for="qeOutput"><strong>Erzeugter JSON-Eintrag</strong></label>
+      <textarea id="qeOutput" rows="18" readonly></textarea>
+    </div>
+  </div>
+</section>
+    <section class="panel">
+      <div class="results-header">
+        <h2>Einträge</h2>
+      </div>
+      <div id="results" class="results-grid"></div>
+      <div id="emptyState" class="empty-state hidden">
+        Keine Treffer. Passe Suche oder Filter an.
+      </div>
+    </section>
+  </main>
+
+  <div id="drawerBackdrop" class="drawer-backdrop hidden"></div>
+
+  <aside id="detailDrawer" class="detail-drawer" aria-hidden="true">
+    <div class="detail-drawer__header">
+      <div>
+        <p class="drawer-kicker">Eintrag</p>
+        <h2 id="drawerTitle">Titel</h2>
+      </div>
+      <button id="closeDrawerBtn" class="drawer-close-btn" type="button" aria-label="Schließen">
+        ×
+      </button>
+    </div>
+
+    <div class="detail-drawer__body">
+      <p id="drawerDescription" class="drawer-description"></p>
+
+      <div class="drawer-actions">
+        <a id="drawerOpenViewBtn" class="primary-btn" href="#" target="_blank" rel="noopener noreferrer">
+          In View App öffnen
+        </a>
+        <a id="drawerOpenSourceBtn" class="secondary-btn" href="#" target="_blank" rel="noopener noreferrer">
+          Original-Link öffnen
+        </a>
+      </div>
+
+      <section class="drawer-section">
+        <h3>Warum relevant?</h3>
+        <p id="drawerWhyRelevant" class="drawer-text">-</p>
+      </section>
+
+      <section class="drawer-section">
+        <h3>Metadaten</h3>
+        <div id="drawerMeta" class="drawer-meta"></div>
+      </section>
+
+      <section class="drawer-section">
+        <h3>Tags</h3>
+        <div id="drawerTags" class="tags"></div>
+      </section>
+
+      <section class="drawer-section">
+        <h3>Collections</h3>
+        <div id="drawerCollections" class="tags"></div>
+      </section>
+    </div>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>
